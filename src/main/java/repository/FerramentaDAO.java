@@ -21,27 +21,26 @@ import org.springframework.stereotype.Repository;
 public class FerramentaDAO {
     
     public int criar(FerramentaBean ferramenta){
-        
+        int linhas = 0;
         try{
             Connection conn = Conexao.conectar();
             PreparedStatement stmt = null;
 
-            stmt = conn.prepareStatement("INSERT INTO tb_ferramenta (id, nome, horasUso, vidaUtilMaxima) VALUES (?,?,?,?)");
-            stmt.setInt(1, ferramenta.getId());
-            stmt.setString(2, ferramenta.getNome());
-            stmt.setInt(3, ferramenta.getHorasUso());
-            stmt.setInt(4, ferramenta.getVidaUtilMaxima());
+            stmt = conn.prepareStatement("INSERT INTO tb_ferramenta (nome, horasUso, vidaUtilMaxima) VALUES (?,?,?)");
+            stmt.setString(1, ferramenta.getNome());
+            stmt.setInt(2, ferramenta.getHorasUso());
+            stmt.setInt(3, ferramenta.getVidaUtilMaxima());
             
             return stmt.executeUpdate();
             
         }catch(SQLException e){
             e.printStackTrace();
         }
-        return 0;
+        return linhas;
     }
     
     public List<FerramentaBean> listar(){
-        List<FerramentaBean> ferramenta = new ArrayList();
+        List<FerramentaBean> lista = new ArrayList();
         
         try{
             Connection conn = Conexao.conectar();
@@ -59,15 +58,16 @@ public class FerramentaDAO {
                 f.setHorasUso(rs.getInt("horasUso"));
                 f.setVidaUtilMaxima(rs.getInt("vidaUtilMaxima"));
                 
-                ferramenta.add(f);
+                lista.add(f);
             }
         }catch(SQLException e) {
             e.printStackTrace();
         }
-        return ferramenta;
+        return lista;
     }
     
-    public void atualizar(FerramentaBean ferramentas){
+    public int atualizar(FerramentaBean ferramentas){
+        int linhas = 0;
         
         try{
             Connection conn = Conexao.conectar();
@@ -80,14 +80,16 @@ public class FerramentaDAO {
             stmt.setInt(3, ferramentas.getVidaUtilMaxima());
             stmt.setInt(4, ferramentas.getId());
             
-            stmt.executeUpdate();
+            linhas = stmt.executeUpdate();
             
         }catch (SQLException e){
             e.printStackTrace();
         }
+        return linhas;
     }
         
-    public void deletar(int id){
+    public int deletar(int id){
+        int linhas = 0;
         
         try{
             Connection conn = Conexao.conectar();
@@ -97,12 +99,11 @@ public class FerramentaDAO {
             
             stmt.setInt(1, id);
             
-            stmt.executeUpdate();
-            stmt.close();
-            stmt.close();
+            linhas = stmt.executeUpdate();
             
         }catch(SQLException e){
             e.printStackTrace();
         }
+        return linhas;
     }
 }

@@ -5,6 +5,7 @@
 package controller;
 
 import java.util.List;
+import model.FerramentaBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,12 +21,18 @@ public class FerramentaController {
     
     @Autowired
     private FerramentaService service;
-            
-    @GetMapping("/ferramentas")
-    public String listarFerramenta(Model model){
-        List<Model> listaFerramentas = service.listar();
-        return "ferramentas";
+    
+    // Levar sempre para "ferramentas" caso chegar em index
+    @GetMapping("/")
+    public String index(){
+        return "redirect:/ferramentas";
     }
     
-    
+    @GetMapping("/ferramentas")
+    public String listarFerramentas(Model model){
+        List<FerramentaBean> lista = service.listarFerramentas();
+        model.addAttribute("ferramentas", lista);
+        
+        return "ferramentas";
+    }
 }

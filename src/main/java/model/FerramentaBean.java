@@ -57,7 +57,6 @@ public class FerramentaBean {
     }
 
     public double getPercentualDesgaste(){
-        return (horasUso * 100.0) / vidaUtilMaxima;
-    }
-    
+        return (horasUso / vidaUtilMaxima) * 100;
+    }   
 }
